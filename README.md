@@ -4,8 +4,6 @@
 1. [Objective](#objective)
 2. [Environment Setup Information](#environment-setup-information)
 3. [Setting Up Docker Containers](#setting-up-docker-containers)
-   - Define containers
-   - Docker-compose.yaml
 4. [Configuring Kerberos server in the server container](#configuring-kerberos-server-in-the-server-container)
 5. [Configuring Kerberos database](#configuring-kerberos-database)
    - Create the Kerberos Database
@@ -39,10 +37,10 @@
    - Restrict Access for Kerberos Principals
    - Restart Apache Service
 10. [Testing Apache Kerberos authentication as client](#testing-apache-kerberos-authentication-as-client)
-   - Request a Ticket-Granting Ticket (TGT)
-   - Verify TGT Granting
-   - Access Restricted Web Directory
-   - Verify TGT and Service Tickets
+      - Request a Ticket-Granting Ticket (TGT)
+      - Verify TGT Granting
+      - Access Restricted Web Directory
+      - Verify TGT and Service Tickets
 
 ## Objective
 This project will dive into Kerberos architecture and explore how it operates in a real-world context. In this blog post, I will explain how Kerberos works through hands-on implementation.
