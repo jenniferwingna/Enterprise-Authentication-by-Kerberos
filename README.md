@@ -1,4 +1,4 @@
-# Enterprise-Authentication by Kerberos
+# Enterprise Authentication by Kerberos
 ## Content Page
 
 1. [Objective](#objective)
