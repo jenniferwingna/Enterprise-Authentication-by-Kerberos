@@ -22,11 +22,8 @@ A Kerberos realm will be set up with a four-digit PIN code(XXXX). The PIN code c
 8. apache server: **host/apache.kerberosprojectXXXX.com**
 
 ## Setting Up Docker Containers
-#### Define containers:
-    
-    create a directory as follows:
-    
-    ```markdown
+### Define containers:
+create a directory as follows:
     
     ├── kerberos
     │   ├── client
@@ -38,13 +35,11 @@ A Kerberos realm will be set up with a four-digit PIN code(XXXX). The PIN code c
     │       └── Dockerfile
     │   └── apache-server
     │       └── Dockerfile
-    ```
     
-    Configure the files as follows. Remember to replace XXXX with the PIN code decided before.
-     
-    Docker-compse.yaml
-    
-    ```markdown
+Configure the files as follows. Remember to replace XXXX with the PIN code decided before.
+
+Docker-compose.yaml
+
     #docker-compose.yaml
     version: '3.3'
     services:
@@ -110,11 +105,8 @@ A Kerberos realm will be set up with a four-digit PIN code(XXXX). The PIN code c
         ipam:
           config:
             - subnet: 10.6.0.0/16
-    ```
-    
-    Client Dockerfile
-    
-    ```markdown
+
+Client Dockerfile
     #client/Dockerfile
     
     FROM ubuntu:18.04
@@ -129,11 +121,10 @@ A Kerberos realm will be set up with a four-digit PIN code(XXXX). The PIN code c
     RUN echo "export VISIBLE=now" >> /etc/profile
     RUN #(nop) EXPOSE 22
     RUN #(nop) CMD ["/usr/sbin/sshd" "-D"]
-    ```
+
+Server Dockerfile
     
-    Server Dockerfile
     
-    ```markdown
     #server/Dockerfile
     
     FROM ubuntu:18.04
@@ -142,11 +133,10 @@ A Kerberos realm will be set up with a four-digit PIN code(XXXX). The PIN code c
     RUN apt-get install nano rsyslog -y
     RUN apt install inetutils-ping -y
     RUN apt-get install openssh-server -y
-    ```
+
+SSH-server Dockerfile
     
-    SSH-server Dockerfile
     
-    ```markdown
     #ssh-server/Dockerfile
     
     FROM ubuntu:18.04
@@ -159,11 +149,10 @@ A Kerberos realm will be set up with a four-digit PIN code(XXXX). The PIN code c
     RUN apt-get install nano rsyslog -y
     RUN apt install inetutils-ping -y
     RUN apt-get -qq clean
-    ```
+
+Apache-server Dockerfile
     
-    Apache-server Dockerfile
     
-    ```markdown
     #apache-server/Dockerfile
     
     FROM ubuntu:18.04
@@ -176,16 +165,19 @@ A Kerberos realm will be set up with a four-digit PIN code(XXXX). The PIN code c
     RUN apt-get install nano rsyslog -y
     RUN apt install inetutils-ping -y
     RUN apt-get -qq clean
-    ```
+
+After the configuration, we can execute to compose and build docker containers.
+<p align="center">
+  <img width="274" alt="docker-compose" src="https://github.com/jenniferwingna/Enterprise-Authentication-by-Kerberos/assets/116328799/587022bb-48d9-4ed3-982e-5e2df4eee8fd">
+</p>
     
-    After the configuration, we can execute to compose and build docker containers.
-    
-    <img width="274" alt="docker-compose" src="https://github.com/jenniferwingna/Enterprise-Authentication-by-Kerberos/assets/116328799/587022bb-48d9-4ed3-982e-5e2df4eee8fd">
-    
-      This will spawn four containers - kerberos_client2, kerberos_server, ssh-server, and apache-server - with pre-assigned static IP address and DNS resolution.
-      
-      Execute $docker ps to check the situation of the four containers:
-    <img width="472" alt="docker-ps" src="https://github.com/jenniferwingna/Enterprise-Authentication-by-Kerberos/assets/116328799/697610e2-3bfb-4964-90b1-320bff828aa6">
+This will spawn four containers - kerberos_client2, kerberos_server, ssh-server, and apache-server - with pre-assigned static IP address and DNS resolution.
+Execute $docker ps to check the situation of the four containers:
+<p align="center">
+  <img width="472" alt="docker-ps" src="https://github.com/jenniferwingna/Enterprise-Authentication-by-Kerberos/assets/116328799/697610e2-3bfb-4964-90b1-320bff828aa6">
+
+</p>
+
 
 ## Configuring Kerberos server in the server container
 To set up the Key Distribution Center (KDC) and the admin server, we'll  get into the server container by this command:
@@ -209,10 +201,10 @@ After the installation, it's important to verify the default configurations gene
 You can review the configuration file located at **`/etc/krb5kdc/kdc.conf`**. Make sure that the realm name specified in the file matches the realm name you intend to use for this project.
 
 Your kdc.conf will look like this:
-
-<img width="469" alt="krb5kdc-config" src="https://github.com/jenniferwingna/Enterprise-Authentication-by-Kerberos/assets/116328799/498bf5fe-5296-4f17-bdcd-76dd5604ebc6" align="center">
-
-
+<p align="center">
+  <img width="469" alt="krb5kdc-config" src="https://github.com/jenniferwingna/Enterprise-Authentication-by-Kerberos/assets/116328799/498bf5fe-5296-4f17-bdcd-76dd5604ebc6" align="center">
+  
+</p>
 If you need to start over or make changes to the configurations later on, you have a couple of options. You can either edit the configuration files directly (we'll cover this in the next part), or you can use the command:
 
 ```bash
@@ -220,10 +212,10 @@ $ sudo dpkg-reconfigure --no-reload krb5-config
 ```
 
 Your **`/etc/krb5.conf` will look like this:**
-
-<img width="437" alt="krb5-config" src="https://github.com/jenniferwingna/Enterprise-Authentication-by-Kerberos/assets/116328799/65e0ba6e-b30f-448b-8086-2615feeb39dc" align="center"  >
-
-
+<p align="center">
+  <img width="437" alt="krb5-config" src="https://github.com/jenniferwingna/Enterprise-Authentication-by-Kerberos/assets/116328799/65e0ba6e-b30f-448b-8086-2615feeb39dc" align="center"  >
+  
+</p>
 Remember to restart the services after making any changes, especially when editing the configuration files manually.
 
 ## Configuring Kerberos database
@@ -251,7 +243,10 @@ Stay in the server container, we will be configuring the kerberos database. In K
     
     Inside the kadmin console, add two user principals, replacing `<first_user>` with the desired names:
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/9e0c49bd-874e-4a4c-9f49-63ff87d1aaf2/07a16b97-bef8-41a8-bc0c-fc77fc682705/Untitled.png)
+   <p align="center">
+     <img width="625" alt="addprinc" src="https://github.com/jenniferwingna/Enterprise-Authentication-by-Kerberos/assets/116328799/013a1db5-5fc4-4a5d-80ae-bf881935bbc4">
+
+   </p>
     
     Adding user principals allows individuals to authenticate themselves to the Kerberos system.
     
@@ -263,14 +258,19 @@ Stay in the server container, we will be configuring the kerberos database. In K
     $ addprinc -randkey host/ssh-server.kerberosprojectXXXX.com@kerberosprojectXXXX.com
     $ addprinc -randkey HTTP/apache.kerberosprojectXXXX.com@kerberosprojectXXXX.com
     ```
-    
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/9e0c49bd-874e-4a4c-9f49-63ff87d1aaf2/a06f7999-f37a-4eb3-9bf1-43336ac8152c/Untitled.png)
+    <p align="center">
+      <img width="667" alt="2" src="https://github.com/jenniferwingna/Enterprise-Authentication-by-Kerberos/assets/116328799/41c81fc3-f1b6-43c5-9c9a-c6bf5819e406">
+
+    </p>
     
     Services like SSH and Apache are enabled to authenticate themselves to the Kerberos system.
     
-    Execute $listprincs to check if all the required principals are added successfully:
+    Execute `$listprincs` to check if all the required principals are added successfully:
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/9e0c49bd-874e-4a4c-9f49-63ff87d1aaf2/24322431-7158-4c18-bd5d-340688cde22f/Untitled.png)
+   <p align="center">
+     <img width="441" alt="3" src="https://github.com/jenniferwingna/Enterprise-Authentication-by-Kerberos/assets/116328799/d81a1d5e-8da9-4663-92b0-4e769bfe9654">
+
+   </p>
     
 5. **Generating Keytab Files:**
     
@@ -290,9 +290,10 @@ Stay in the server container, we will be configuring the kerberos database. In K
 7. **Restarting Services:**
     
     Restart the `krb5-kdc` and `krb5-admin-server` services and verify their status by following command:
-    
+    ```
     $ sudo systemctl restart krb5-kdc
     $ sudo systemctl restart krb5-admin-server
+    ```
     
      They should be active and running to ensures that any changes made to the Kerberos configuration take effect.
       
