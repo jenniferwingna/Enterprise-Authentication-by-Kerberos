@@ -1,48 +1,48 @@
 # Enterprise-Authentication by Kerberos
-# Content Page
+## Content Page
 
 1. [Objective](#objective)
 2. [Environment Setup Information](#environment-setup-information)
 3. [Setting Up Docker Containers](#setting-up-docker-containers)
-   - [Define containers](#define-containers)
-   - [Docker-compose.yaml](#docker-composeyaml)
+   - Define containers
+   - Docker-compose.yaml
 4. [Configuring Kerberos server in the server container](#configuring-kerberos-server-in-the-server-container)
 5. [Configuring Kerberos database](#configuring-kerberos-database)
-   - [Create the Kerberos Database](#create-the-kerberos-database)
-   - [Managing Principals with kadmin](#managing-principals-with-kadmin)
-   - [Adding User Principals](#adding-user-principals)
-   - [Adding Host Principals](#adding-host-principals)
-   - [Generating Keytab Files](#generating-keytab-files)
-   - [Copying Keytab Files](#copying-keytab-files)
-   - [Restarting Services](#restarting-services)
+   - Create the Kerberos Database
+   - Managing Principals with kadmin
+   - Adding User Principals
+   - Adding Host Principals
+   - Generating Keytab Files
+   - Copying Keytab Files
+   - Restarting Services
 6. [Setting up client within client container](#setting-up-client-within-client-container)
-   - [Install Kerberos Client Packages](#install-kerberos-client-packages)
-   - [Verify Kerberos Client Configuration](#verify-kerberos-client-configuration)
+   - Install Kerberos Client Packages
+   - Verify Kerberos Client Configuration
 7. [Setting up SSH-Server within ssh-server container](#setting-up-ssh-server-within-ssh-server-container)
-   - [Update Kerberos Configuration in `krb5.conf`](#update-kerberos-configuration-in-krb5conf)
-   - [Create User Account](#create-user-account)
-   - [Configure OpenSSH for Kerberos Authentication](#configure-openssh-for-kerberos-authentication)
-   - [Restart SSH Service](#restart-ssh-service)
-   - [Copy and Set Permissions for `krb5.keytab` File](#copy-and-set-permissions-for-krb5keytab-file)
+   - Update Kerberos Configuration in `krb5.conf`
+   - Create User Account
+   - Configure OpenSSH for Kerberos Authentication
+   - Restart SSH Service
+   - Copy and Set Permissions for `krb5.keytab` File
 8. [Testing SSH Kerberos authentication as client](#testing-ssh-kerberos-authentication-as-client)
-   - [Request a Ticket-Granting Ticket (TGT)](#request-a-ticket-granting-ticket-tgt)
-   - [Verify TGT Granting](#verify-tgt-granting)
-   - [Authenticate with SSH Server](#authenticate-with-ssh-server)
-   - [Verify TGT and Service Tickets](#verify-tgt-and-service-tickets)
+   - Request a Ticket-Granting Ticket (TGT)
+   - Verify TGT Granting
+   - Authenticate with SSH Server
+   - Verify TGT and Service Tickets
 9. [Setting up Apache Server Within Apache server container](#setting-up-apache-server-within-apache-server-container)
-   - [Update Kerberos Configuration in `krb5.conf`](#update-kerberos-configuration-in-krb5conf-1)
-   - [Install the `mod_auth_kerb` Authentication Module](#install-the-mod_auth_kerb-authentication-module)
-   - [Enable the Module in Apache](#enable-the-module-in-apache)
-   - [Copy and Set Permissions for Keytab File](#copy-and-set-permissions-for-keytab-file)
-   - [Configure Apache for Kerberos Authentication](#configure-apache-for-kerberos-authentication)
-   - [Create a Test File for Kerberos Authentication](#create-a-test-file-for-kerberos-authentication)
-   - [Restrict Access for Kerberos Principals](#restrict-access-for-kerberos-principals)
-   - [Restart Apache Service](#restart-apache-service)
+   - Update Kerberos Configuration in `krb5.conf`
+   - Install the `mod_auth_kerb` Authentication Module
+   - Enable the Module in Apache
+   - Copy and Set Permissions for Keytab File
+   - Configure Apache for Kerberos Authentication
+   - Create a Test File for Kerberos Authentication
+   - Restrict Access for Kerberos Principals
+   - Restart Apache Service
 10. [Testing Apache Kerberos authentication as client](#testing-apache-kerberos-authentication-as-client)
-    - [Request a Ticket-Granting Ticket (TGT)](#request-a-ticket-granting-ticket-tgt-1)
-    - [Verify TGT Granting](#verify-tgt-granting-1)
-    - [Access Restricted Web Directory](#access-restricted-web-directory)
-    - [Verify TGT and Service Tickets](#verify-tgt-and-service-tickets-1)
+   - Request a Ticket-Granting Ticket (TGT)
+   - Verify TGT Granting
+   - Access Restricted Web Directory
+   - Verify TGT and Service Tickets
 
 ## Objective
 This project will dive into Kerberos architecture and explore how it operates in a real-world context. In this blog post, I will explain how Kerberos works through hands-on implementation.
